@@ -1,0 +1,8 @@
+.select-estados{
+    width: 100%;
+    height: 50px;
+}
+
+.select-estados option{
+    height: 50px;
+}
