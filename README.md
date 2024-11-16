@@ -1,28 +1,35 @@
-# Vue test
+# Dados Geodésicos
 
-This template should help get you started developing with Vue 3 in Vite.
+Esta aplicação é para fins de pesquisas e estudos.
 
-## Recommended IDE Setup
+### Dados
+Os dados utilizados para estudos são da API do [IBGE](https://servicodados.ibge.gov.br/api/docs/):
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Mapa
+O mapa utilizado é do [OpenLayers](https://openlayers.org/)
 
-## Customize configuration
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Recomendação de Configuração da IDE
 
-## Project Setup
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (e desabilitar Vetur).
+
+## Configuração Customizado
+
+Ver [Referência de configuração do vite](https://vite.dev/config/).
+
+## Configuração do Projeto
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compilação e auto-reload para desenvolvimento
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Compilação e minificador para produção
 
 ```sh
 npm run build
