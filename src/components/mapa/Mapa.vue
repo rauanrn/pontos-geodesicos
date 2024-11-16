@@ -8,6 +8,10 @@
         </select>
         <div ref="map" class="map-container"></div>
     </div>
+
+    <div id="popup" class="ol-popup" style="display: none;">
+        <div id="popup-content"></div>
+    </div>
 </template>
 
 <script>

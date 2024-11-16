@@ -12,6 +12,7 @@ import { Style, Icon, Stroke, Text, Fill, Circle as CircleStyle } from 'ol/style
 import { fromLonLat } from 'ol/proj'; // Converter coordenadas
 import pinIcon from '@/assets/icons8-pin-50.png';
 import "ol/ol.css";
+import Overlay from 'ol/Overlay';
 
 export const useStations = () => {
     const stations = ref([]);
@@ -67,9 +68,10 @@ export const useStations = () => {
             // Criar a fonte de dados para os pins
             const vectorSource = new VectorSource();
 
+
             // Adiciona um ponto para cada estação
             data.forEach((station) => {
-                const { latitude, longitude } = station;
+                const { latitude, longitude, descricaoEstacao } = station;
 
                 if (latitude && longitude) {
                     // Converter latitude e longitude para EPSG:3857
@@ -77,7 +79,8 @@ export const useStations = () => {
 
                     // Adicionar um ponto para cada estação
                     const feature = new Feature({
-                        geometry: new Point(coordinates), // Usar as coordenadas convertidas
+                        geometry: new Point(coordinates),
+                        descricaoEstacao: descricaoEstacao // Usar as coordenadas convertidas
                     });
 
                     vectorSource.addFeature(feature);
@@ -109,6 +112,9 @@ export const useStations = () => {
                         image: new Icon({
                             src: pinIcon, // Ícone do pin individual
                             scale: 1,
+                            anchor: [0.5, 1], // Alinhar na parte inferior (0.5 para centralizar horizontalmente, 1 para a base vertical)
+                            anchorXUnits: 'fraction', // Usa a fração da largura do ícone
+                            anchorYUnits: 'fraction' // Usa a fração da altura do ícone
                         }),
                     });
                 }
@@ -125,6 +131,44 @@ export const useStations = () => {
             });
 
             map.addLayer(pinsLayer.value); // Adicionar a nova camada ao mapa
+
+            // Criar o overlay do popup
+            const popup = new Overlay({
+                element: document.getElementById('popup'), // ID do elemento HTML do popup
+                positioning: 'bottom-center',
+                stopEvent: false,
+            });
+            map.addOverlay(popup);
+
+            // Evento de mouse para mostrar o popup ao passar o mouse sobre o pin
+            map.on('pointermove', (event) => {
+
+                const featurePopup = map.forEachFeatureAtPixel(event.pixel, (feature) => {
+                    // Verifica se o feature é um cluster
+                    if (feature.get('features')) {
+                        // Se for um cluster, pega a primeira feature dentro do cluster (por exemplo, o primeiro pin)
+                        const features = feature.get('features');
+                        return features[0]; // Retorna o primeiro pin individual dentro do cluster
+                    }
+                    // Se não for cluster, retorna o feature diretamente (pin individual)
+                    return feature;
+                });
+
+                if (featurePopup) {
+                    // Exibir o popup com a descrição da estação
+                    const coordinates = featurePopup.getGeometry().getCoordinates();
+                    const descricaoEstacao = featurePopup.get('descricaoEstacao'); // Pega a descrição da estação
+                    if (descricaoEstacao){
+                        popup.setPosition(coordinates);
+                        document.getElementById('popup-content').innerHTML = descricaoEstacao; // Exibir a descrição da estação
+                        document.getElementById('popup').style.display = 'block';
+                    }else{
+                        document.getElementById('popup').style.display = 'none'; // Ocultar o popup
+                    }
+                } else {
+                    document.getElementById('popup').style.display = 'none'; // Ocultar o popup
+                }
+            });
 
         } catch (err) {
             error.value = err.message || 'Erro desconhecido';

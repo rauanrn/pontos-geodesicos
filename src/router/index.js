@@ -10,12 +10,7 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: () => import('../pages/Login.vue'),
-    },
-    {
-        path: '/mapa-teste',
-        name: 'teste',
-        component: () => import('../pages/MapaTeste.vue'),
-    },
+    }
 ];
 
 const router = createRouter({
